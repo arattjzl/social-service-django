@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+    Bienvenido al Sistema de SS
+{% endblock titulo %}
+
+{% block contenido %}
+<br>
+<hr>
+<body>
+    <h1>Unidades Acádemicas UAZ</h1>
+    <a class="btn btn-primary" href="{% url 'nueva_unidad' %}">Nueva Unidad</a>
+
+    <form method="post">
+        <table width="70%" class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Description</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody align="center">
+                {% for unidad in unidades %}
+                    <tr>
+                        <td>{{unidad.id}}</td>
+                        <td>{{unidad.nombre}}</td>
+                        <td>{{unidad.descripcion}}</td>
+                        <td>
+                            <a href="{% url 'eliminar_unidad' unidad.id %}" class="btn btn-danger">Eliminar</a>
+                            <a href="{% url 'editar_unidad' unidad.id %}" class="btn btn-outline-primary">Editar</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </form>
+</body>
+{% endblock contenido %}

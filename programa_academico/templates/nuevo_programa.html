@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+Nuevo programa
+{% endblock titulo %}
+
+{% block contenido %}
+<h1>Nuevo programa</h1>
+<form method="post" class="form">
+    {% csrf_token %}
+    <div class="row mb-3">
+        <div class="col-8">
+            {{ form.nombre.label_tag }}
+            {{ form.nombre }}
+
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col">
+            {{ form.descripcion.label_tag }}
+            {{ form.descripcion }}
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-10">
+            {{ form.unidad_academica.label_tag }}
+            {{ form.unidad_academica }}
+        </div>
+        <div class="col-2 align-middle">
+            <button type="button" class="btn mt-2" data-bs-toggle="modal" data-bs-target="#unidadModal">
+                <i class="bi bi-plus-circle-fill fs-3"></i>
+            </button>
+        </div>
+    </div>
+    <button class="btn btn-success " type="submit">Agregar</button>
+    <a class="btn btn-warning" href="{% url 'lista_unidades' %}">Cancelar</a>
+</form>
+
+
+<div class="modal fade" id="unidadModal" tabindex="-1" aria-labelledby="unidadModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="unidadModalLabel">Nueva unidad</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{% url 'nueva_unidad_ajax' %}" class="form" id="formUnidad">
+                <div class="modal-body">
+                    {% csrf_token %}
+                    {{form_unidad.as_p}}
+                </div>
+                <div class="modal-footer">
+                    <button id="btnCerrar" type="button" class="btn btn-secondary"
+                        data-bs-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Agregar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock contenido %}
+
+
+{% block scripts %}
+<script>
+    $("#formUnidad").submit(function (e) {
+        e.preventDefault();
+        var form = $(this);
+        var url = form.attr("action");
+        console.log(form.serialize());
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: form.serialize(),
+            success: function (data) {
+                console.log(data);
+                if (data.ok) {
+                    var html = "";
+                    $.each(data.unidades, function (llave, valor) {
+                        var seleccion = (valor.id == data.unidad) ? "selected" : "";
+                        html += `<option ${seleccion} value="${valor.id}">${valor.nombre}</option>`;
+                    });
+                    $("#id_unidad_academica").html(html);
+                    $("#btnCerrar").click();
+                }
+                else {
+                    $(".modal-body").prepend(`<div class='alert alert-danger'>${data.error}</div>`);
+                }
+
+            }
+        });
+    });
+</script>
+{% endblock scripts %}

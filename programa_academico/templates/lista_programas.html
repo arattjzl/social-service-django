@@ -1,0 +1,114 @@
+{% extends 'base2.html' %}
+
+{% block titulo %}
+Unidades académicas
+{% endblock titulo %}
+
+{% block contenido %}
+<h1>Programas Academicos UAZ</h1>
+<a class="btn btn-success" href="{%url 'nuevo_programa'%}">Nuevo Programa</a>
+<form method="post">
+  {% csrf_token %}
+  <table class="table" >
+ 
+    <thead>
+      <tr>
+        <td></td>
+        <td>{{form.nombre}}</td>
+        <td>{{form.descripcion}}</td>
+        <td>{{form.unidad}}</td>
+        <td>
+          <button   class="btn btn-primary btn-sm">Buscar</button>
+        </td>
+      </tr> 
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Descripcion</th>
+            <th>Unidad Academica</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    
+    <tbody>
+        {% for programa in programas %}
+        <tr>
+            <td>{{programa.id}}</td>
+            <td>{{programa.nombre}}</td>
+            <td>{{programa.descripcion}}</td>
+            <td>{{programa.unidad_academica}}</td>
+            <td>
+                <!-- <a class="btn btn-outline-danger btn-sm" href = "{% url 'eliminar_programa' programa.id%}">Eliminar</a> -->
+                <a  data-bs-toggle="modal" data-bs-target="#confirmDeleteModal{{programa.id}}" class="btn btn-outline-danger btn-sm">Eliminar</a>
+                <a class="btn btn-outline-primary btn-sm" href = "{% url 'editar_programa' programa.id%}">Editar</a>
+                
+            </td>
+        </tr>
+        <div class="modal fade" id="confirmDeleteModal{{programa.id}}" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="eliminaModalLabel">Eliminar</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                ¿Seguro que lo quieres eliminar?
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        
+                <a class="btn btn-outline-danger btn-sm" href = "{% url 'eliminar_programa' programa.id%}">aceptar</a>
+              </div>
+            </div>
+          </div>
+        </div>
+       
+    {% endfor %}
+
+    </tbody>
+        
+  </table>
+  <div class="pagination">
+    <span class="step-links">
+        {% if programas.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ programas.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ programas.number }} of {{ programas.paginator.num_pages }}.
+        </span>
+
+        {% if programas.has_next %}
+            <a href="?page={{ programas.next_page_number }}">next</a>
+            <a href="?page={{ programas.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+<div>
+  
+    
+  <form method="post" class="form">
+    {% csrf_token %}
+    <label for="cuantos">Selecciona la cantidad:</label>
+    <select name="cuantos" id="cuantos">
+        <option value="1" {% if cuantos == 1 %}selected{% endif %}>Uno</option>
+        <option value="2" {% if cuantos == 2 %}selected{% endif %}>Dos</option>
+        <option value="3" {% if cuantos == 3 %}selected{% endif %}>Tres</option>
+    </select>
+    <span>&nbsp;&nbsp;</span>
+    <input class="btn btn-secondary" type="submit" value="Enviar">
+</form>
+      
+      
+        
+ 
+</div>
+      
+      
+    
+ 
+</div>
+</form>
+
+{% endblock contenido %}
