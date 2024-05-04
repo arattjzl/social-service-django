@@ -7,35 +7,36 @@ Instituciones
 {% block contenido %}
 <h1>Instituciones</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Descripción</th>
-                <th>Dirección</th>
-                <th>Télefono</th>
-                <th>E-mail</th>
-                <th>Imagen</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for institucion in object_list %}
-            <tr>
-                <td>{{institucion.id}}</td>
-                <td>{{institucion.nombre}}</td>
-                <td>{{institucion.descripcion}}</td>
-                <td>{{institucion.direccion}}</td>
-                <td>{{institucion.telefono}}</td>
-                <td>{{institucion.mail}}</td>
-                <td><img src="{{MEDIA_URL}}{{institucion.imagen}}" alt="{{institucion.imagen}}" width="40%"></td>
-                <td>
-                    <a class="btn btn-outline-danger btn-sm" href="#">Eliminar</a>
-                    <a class="btn btn-outline-primary btn-sm" href="#">Editar</a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Dirección</th>
+            <th>Télefono</th>
+            <th>E-mail</th>
+            <th>Imagen</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for institucion in object_list %}
+        <tr>
+            <td>{{institucion.nombre}}</td>
+            <td>{{institucion.descripcion}}</td>
+            <td>{{institucion.direccion}}</td>
+            <td>{{institucion.telefono}}</td>
+            <td>{{institucion.mail}}</td>
+            <td><img width="60px" src="{{MEDIA_URL}}{{institucion.imagen}}" alt="{{institucion.imagen}}"> </td>
+            <td>
+                <a class="btn btn-outline-danger btn-sm"
+                    href="{% url 'eliminar_institucion' institucion.pk %}">Eliminar</a>
+                <a class="btn btn-outline-primary btn-sm"
+                    href="{% url 'editar_institucion' institucion.pk %}">Editar</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 
 {% endblock contenido %}
