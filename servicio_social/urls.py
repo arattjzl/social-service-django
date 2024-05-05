@@ -9,5 +9,6 @@ urlpatterns = [
     path('unidades/', include('programa_academico.urls')),
     path('instituciones/', include('instituciones.urls')),
     path('programas/', include('programa_academico.urlsPrograma')),
+    path('usuarios/', include('usuarios.urls')),
     path('', bienvenida, name='bienvenida'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
